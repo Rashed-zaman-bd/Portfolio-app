@@ -1,0 +1,45 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    /* File Layout */
+    // "rootDir": "./src",
+    // "outDir": "./dist",
+
+    /* Environment Settings */
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    /* Types */
+    "types": [],
+    // If using Node.js:
+    // "types": ["node"],
+    // and install: npm install -D @types/node
+
+    /* Output Options */
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    /* Stricter Type Checking */
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    /* Recommended Strictness */
+    "strict": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "useDefineForClassFields": true,
+
+    /* Module & Imports */
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+
+    /* Libraries */
+    "lib": ["ESNext", "DOM"],
+
+    /* Performance */
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
+}
