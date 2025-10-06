@@ -1,9 +1,9 @@
 <template>
   <div class="flex-1 flex flex-col">
     <!-- About Section -->
-    <div class="flex flex-col xl:mx-24">
+    <div class="flex flex-col xl:mx-4 2xl:mx-24 md:mt-16 lg:mt-6">
       <h1
-        class="text-2xl md:text-4xl md:font-bold font-semibold text-gray-800 mx-4 md:mt-6"
+        class="text-2xl md:text-4xl md:font-bold font-semibold text-gray-800 mx-4"
         data-aos="fade-up"
         data-aos-duration="1000"
       >
@@ -70,8 +70,8 @@
               Who I'm
             </h1>
             <p class="text-sm italic md:text-base text-gray-700">
-              Simply put, I am a full-stack web developer with PHP Laravel and Vue.js. And
-              AI agent developer.
+              Simply put, I am a full-stack web developer with PHP Laravel Vue.js. And AI
+              agent developer.
             </p>
           </div>
 

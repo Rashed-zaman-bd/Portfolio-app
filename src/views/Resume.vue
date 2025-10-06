@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 flex flex-col xl:mt-6">
+  <div class="flex-1 flex flex-col md:mt-16 lg:mt-6">
     <!-- Header with Fade-Up Animation -->
     <div class="flex flex-col" data-aos="fade-up" data-aos-duration="1000">
       <h1
@@ -52,7 +52,7 @@
             <h3 class="text-lg md:text-xl text-gray-800">
               FULL STACK DEVELOPMENT PHP & LARAVEL
             </h3>
-            <p class="text-gray-700">2022 - 2023</p>
+            <p class="text-gray-700">2021 - 2022</p>
             <p class="text-gray-700 text-base mb-2">Uttara, Dhaka, Bangladesh</p>
             <p class="text-gray-700 text-base">
               Completed a professional training program in Full-Stack Web Development with
@@ -62,8 +62,8 @@
               applications and integrating RESTful APIs.
             </p>
 
-            <h3 class="text-lg md:text-xl text-gray-800 mt-4">BACHELOR OF MATHEMATICS</h3>
-            <p class="text-gray-700">2010 - 2014</p>
+            <h3 class="text-lg md:text-xl text-gray-800 mt-4">MASTER OF MATHEMATICS</h3>
+            <p class="text-gray-700">2013 - 2014</p>
             <p class="text-gray-700 text-base mb-2">National University</p>
             <p class="text-gray-700 text-base">
               Developed strong analytical and problem-solving skills through coursework in
@@ -83,7 +83,7 @@
         <div class="flex flex-col md:flex-row w-full gap-6">
           <div class="border-l-4 border-gray-300 p-4 flex flex-col w-full md:w-1/2">
             <h3 class="text-lg md:text-xl text-gray-800">Freelance Web Developer</h3>
-            <p class="text-gray-700 mb-2">2023 - Present</p>
+            <p class="text-gray-700 mb-2">2022 - Present</p>
             <ul class="list-disc list-inside text-gray-600 mt-2 space-y-2">
               <li>
                 Built and deployed several full-stack web projects using LARAVEL and

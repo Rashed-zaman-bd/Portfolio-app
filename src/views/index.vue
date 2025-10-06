@@ -1,9 +1,10 @@
 <template>
-  <div class="flex-1 flex flex-col">
+  <div class="flex-1 flex flex-col" v-for="heroPage in heroPages" :key="heroPage.id">
     <!-- Row with two sections -->
     <div class="flex flex-col md:flex-row md:mt-20">
+      <!-- Left content -->
       <div
-        class="flex flex-col justify-center items-center w-full md:w-2/3 overflow: hidden;"
+        class="flex flex-col justify-center items-center w-full md:w-2/3"
         data-aos="fade-up"
         data-aos-duration="1000"
       >
@@ -11,44 +12,46 @@
           <h3
             class="text-md font-normal md:font-medium border-1 border-gray-800 p-1 md:p-2 text-black md:tracking-[2px]"
           >
-            Design & Development
+            {{ heroPage.keyLine }}
           </h3>
         </div>
         <div class="p-4 md:p-6 justify-center items-center">
-          <h2 class="text-xl md:text-4xl text-gray-700">I can help your business to</h2>
+          <h2 class="text-xl md:text-4xl text-gray-700">
+            {{ heroPage.title }}
+          </h2>
           <h1
             class="md:text-7xl sm:text-5xl text-2xl text-black font-bold pt-1 md:tracking-[1px]"
           >
-            Get online and grow fast
+            {{ heroPage.short_title }}
           </h1>
         </div>
         <div
           class="mt-6 md:mt-12 flex flex-row justify-center items-start md:items-center space-x-2 md:space-x-4"
         >
           <router-link
-            to="/resume"
-            class="bg-gray-800 text-white px-3 md:px-6 md:py-2 border-1 border-black text-md md:text-lg md:tracking-[2px] hover:bg-white hover:text-gray-800 w-full md:w-auto mb-4 md:mb-0"
-            >Resume</router-link
+            v-for="button in heroPage.buttons"
+            :key="button.label"
+            :to="button.to"
+            :class="button.class"
           >
-          <router-link
-            to="/project"
-            class="bg-white text-gray-800 px-3 md:px-6 md:py-2 border-1 border-black text-md md:text-lg md:tracking-[2px] hover:bg-gray-800 hover:text-white w-full md:w-auto"
-            >Project</router-link
-          >
+            {{ button.label }}
+          </router-link>
         </div>
       </div>
+
+      <!-- Right content (image) -->
       <div
         class="flex justify-center items-center w-full md:w-1/3 p-8"
         data-aos="fade-up"
         data-aos-duration="1000"
       >
-        <img src="@/assets/img/img2.jpg" alt="Profile Image" class="max-w-full h-auto" />
+        <img :src="heroPage.img" alt="Hero Image" class="max-w-full h-auto" />
       </div>
     </div>
 
     <!-- About section -->
     <div
-      class="flex justify-center mt-2 md:mt-20 overflow: hidden;"
+      class="flex justify-center mt-2 md:mt-20"
       data-aos="fade-up"
       data-aos-duration="2000"
     >
@@ -57,13 +60,7 @@
         <p
           class="text-gray-700 leading-relaxed p-4 text-justify md:text-center text-sm md:text-base lg:text-center max-w-5xl mx-auto"
         >
-          I believe in open communication and teamwork when solving problems. Whether
-          you're just starting out or have an established business, I work with you to
-          understand your goals and turn them into high-quality code that gets results.
-          Dedicated and committed Web Developer with over 2 years of experience in
-          designing and developing modern web applications. I have professional skill in
-          Laravel, Vue.js, RESTful APIs, and MySQL, with a strong foundation in HTML, CSS,
-          and JavaScript.
+          {{ heroPage.message }}
         </p>
         <router-link to="/about" class="inline-flex items-center p-2 text-black">
           <span>more</span>
@@ -74,12 +71,69 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import api from "@/api/axios";
+
+// Reactive array for hero pages
+const heroPages = ref<any[]>([]);
+
+onMounted(async () => {
+  try {
+    // Fetch hero data
+    const heroResponse = await api.get("/hero/page");
+
+    // If API returns an array
+    if (Array.isArray(heroResponse.data)) {
+      heroPages.value = heroResponse.data.map((item: any) => ({
+        ...item,
+        buttons: [
+          {
+            label: "Resume",
+            to: "/resume",
+            class:
+              "bg-gray-800 text-white px-3 md:px-6 md:py-2 border-1 border-black text-md md:text-lg md:tracking-[2px] hover:bg-white hover:text-gray-800 w-full md:w-auto mb-4 md:mb-0",
+          },
+          {
+            label: "Project",
+            to: "/project",
+            class:
+              "bg-white text-gray-800 px-3 md:px-6 md:py-2 border-1 border-black text-md md:text-lg md:tracking-[2px] hover:bg-gray-800 hover:text-white w-full md:w-auto",
+          },
+        ],
+      }));
+    } else {
+      // If API returns a single object
+      heroPages.value = [
+        {
+          ...heroResponse.data,
+          buttons: [
+            {
+              label: "Resume",
+              to: "/resume",
+              class:
+                "bg-gray-800 text-white px-3 md:px-6 md:py-2 border-1 border-black text-md md:text-lg md:tracking-[2px] hover:bg-white hover:text-gray-800 w-full md:w-auto mb-4 md:mb-0",
+            },
+            {
+              label: "Project",
+              to: "/project",
+              class:
+                "bg-white text-gray-800 px-3 md:px-6 md:py-2 border-1 border-black text-md md:text-lg md:tracking-[2px] hover:bg-gray-800 hover:text-white w-full md:w-auto",
+            },
+          ],
+        },
+      ];
+    }
+  } catch (error) {
+    console.error("Failed to fetch hero data:", error);
+  }
+});
+</script>
 
 <style scoped>
 [data-aos="fade-up"] {
-  overflow: hidden; /* prevent scrollbar flicker */
-  backface-visibility: hidden; /* smoother GPU rendering */
-  will-change: transform, opacity; /* hint for performance */
+  overflow: hidden;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
 }
 </style>
