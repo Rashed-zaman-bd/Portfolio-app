@@ -20,79 +20,18 @@
       data-aos-duration="2000"
     >
       <div
+        v-for="service in services"
+        :key="service.id"
         class="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow"
       >
         <div class="flex items-center justify-center mb-4">
-          <i class="bi-code-slash text-gray-500 text-3xl"></i>
+          <i :class="service.icon + ' text-gray-500 text-3xl'"></i>
         </div>
         <h3 class="text-xl font-semibold text-gray-800 mb-2 text-center">
-          Web Development
+          {{ service.name }}
         </h3>
         <p class="text-gray-600 text-sm md:text-base text-center">
-          Building responsive and scalable websites using PHP, Laravel, and Vue.js.
-        </p>
-      </div>
-      <div
-        class="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow"
-      >
-        <div class="flex items-center justify-center mb-4">
-          <i class="bi-brush text-gray-500 text-3xl"></i>
-        </div>
-        <h3 class="text-xl font-semibold text-gray-800 mb-2 text-center">UI/UX Design</h3>
-        <p class="text-gray-600 text-sm md:text-base text-center">
-          Crafting intuitive and modern user interfaces with Tailwind CSS and Bootstrap.
-        </p>
-      </div>
-      <div
-        class="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow"
-      >
-        <div class="flex items-center justify-center mb-4">
-          <i class="bi-server text-gray-500 text-3xl"></i>
-        </div>
-        <h3 class="text-xl font-semibold text-gray-800 mb-2 text-center">
-          API Development
-        </h3>
-        <p class="text-gray-600 text-sm md:text-base text-center">
-          Creating robust RESTful APIs with Laravel and integrating third-party services.
-        </p>
-      </div>
-      <div
-        class="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow"
-      >
-        <div class="flex items-center justify-center mb-4">
-          <i class="bi-database text-gray-500 text-3xl"></i>
-        </div>
-        <h3 class="text-xl font-semibold text-gray-800 mb-2 text-center">
-          Database Management
-        </h3>
-        <p class="text-gray-600 text-sm md:text-base text-center">
-          Designing and optimizing MySQL databases for performance and scalability.
-        </p>
-      </div>
-      <div
-        class="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow"
-      >
-        <div class="flex items-center justify-center mb-4">
-          <i class="bi-robot text-gray-500 text-3xl"></i>
-        </div>
-        <h3 class="text-xl font-semibold text-gray-800 mb-2 text-center">
-          AI Agent Development
-        </h3>
-        <p class="text-gray-600 text-sm md:text-base text-center">
-          Developing intelligent AI agents to automate and enhance business processes.
-        </p>
-      </div>
-      <div
-        class="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow"
-      >
-        <div class="flex items-center justify-center mb-4">
-          <i class="bi-tools text-gray-500 text-3xl"></i>
-        </div>
-        <h3 class="text-xl font-semibold text-gray-800 mb-2 text-center">
-          Maintenance & Support
-        </h3>
-        <p class="text-gray-600 text-sm md:text-base text-center">
-          Providing ongoing support and updates for your web applications.
+          {{ service.description }}
         </p>
       </div>
     </div>
@@ -107,19 +46,17 @@
         Skills
       </h1>
 
-      <!-- Grid same style as Services -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div v-for="skill in skills" :key="skill.name">
+        <div v-for="skill in skills" :key="skill.id">
           <div class="flex items-center justify-between mb-2">
             <span class="font-medium text-gray-800">{{ skill.name }}</span>
             <span class="text-sm text-gray-600">{{ skill.level }}%</span>
           </div>
           <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-            <!-- Animated Progress -->
             <div
               class="bg-gray-500 h-2.5 rounded-full transition-all duration-1000 ease-out"
-              :class="{ 'w-0': !animated, 'w-[var(--level)]': animated }"
-              :style="{ '--level': skill.level + '%' }"
+              :class="{ 'w-0': !animated }"
+              :style="{ width: animated ? skill.level + '%' : '0%' }"
             ></div>
           </div>
         </div>
@@ -130,44 +67,31 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import api from "@/api/axios"; // your axios instance
 
-interface Skill {
-  name: string;
-  level: number;
-}
-
-const skills: Skill[] = [
-  { name: "n8n", level: 80 },
-  { name: "PHP", level: 70 },
-  { name: "Laravel", level: 80 },
-  { name: "Vue", level: 80 },
-  { name: "JavaScript", level: 75 },
-  { name: "HTML", level: 90 },
-  { name: "CSS", level: 85 },
-  { name: "Photoshop", level: 50 },
-];
-
+const services = ref([]);
+const skills = ref([]);
 const animated = ref(false);
 
-onMounted(() => {
-  // Start animation after component is mounted
-  setTimeout(() => {
-    animated.value = true;
-  }, 300);
+onMounted(async () => {
+  try {
+    const { data } = await api.get("services");
+    services.value = data.services;
+    skills.value = data.skills;
+
+    // Start skill animation
+    setTimeout(() => {
+      animated.value = true;
+    }, 300);
+  } catch (error) {
+    console.error("Error fetching services/skills:", error);
+  }
 });
 </script>
-
-<style scoped>
-/* Allow dynamic width with CSS variable */
-</style>
 
 <style scoped>
 .text-center,
 .grid > div {
   transition: opacity 0.7s ease-in-out, transform 0.7s ease-in-out;
-}
-
-.w-\[var\(--level\)\] {
-  width: var(--level);
 }
 </style>
