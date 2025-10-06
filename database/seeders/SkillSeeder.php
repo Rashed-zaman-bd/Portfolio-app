@@ -14,9 +14,13 @@ class SkillSeeder extends Seeder
     public function run(): void
     {
         DB::table('skills')->insert([
-            ['name' => 'Frontend Developer'],
-            ['name' => 'Backend Developer'],
-            ['name' => 'Full Stack Developer'],
+            ['name' => 'PHP', 'level' => 70],
+            ['name' => 'Laravel', 'level' => 80],
+            ['name' => 'Vue', 'level' => 80],
+            ['name' => 'JavaScript', 'level' => 75],
+            ['name' => 'HTML', 'level' => 90],
+            ['name' => 'CSS', 'level' => 85],
+            ['name' => 'Photoshop', 'level' => 50],
         ]);
     }
 }
