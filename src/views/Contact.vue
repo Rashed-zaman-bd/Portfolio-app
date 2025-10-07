@@ -149,20 +149,15 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, onMounted } from "vue";
 import api from "@/api/axios";
+import Swal from "sweetalert2";
 
-// Define form type
-interface ContactForm {
-  fullname: string;
-  phone: string;
-  email: string;
-  subject: string;
-  message: string;
-}
+onMounted(() => {
+  document.title = "Contact - My Portfolio";
+});
 
-// Reactive form
-const form = reactive<ContactForm>({
+const form = reactive({
   fullname: "",
   phone: "",
   email: "",
@@ -170,29 +165,30 @@ const form = reactive<ContactForm>({
   message: "",
 });
 
-// Submit handler
-const handleSubmit = async (): Promise<void> => {
+const handleSubmit = async () => {
   try {
-    const response = await api.post<{ message: string; data: ContactForm }>(
-      "/contact",
-      form
-    );
-    alert(response.data.message);
+    const res = await api.post("/contact", form);
+
+    Swal.fire({
+      icon: "success",
+      title: "Message Sent!",
+      text: res.data.message || "Thanks for contacting me!",
+      confirmButtonColor: "#1f2937",
+    });
 
     // Reset form
-    form.fullname = "";
-    form.phone = "";
-    form.email = "";
-    form.subject = "";
-    form.message = "";
-  } catch (error: any) {
-    if (error.response?.data?.errors) {
-      const messages = Object.values(error.response.data.errors).flat().join("\n");
-      alert(messages);
-    } else {
-      alert("Something went wrong!");
-    }
-    console.error(error);
+    Object.keys(form).forEach((key) => (form[key as keyof typeof form] = ""));
+  } catch (err: any) {
+    const msg = err.response?.data?.errors
+      ? Object.values(err.response.data.errors).flat().join("\n")
+      : "Something went wrong!";
+
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: msg,
+      confirmButtonColor: "#dc2626",
+    });
   }
 };
 </script>

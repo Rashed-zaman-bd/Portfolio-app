@@ -79,6 +79,7 @@ import api from "@/api/axios";
 const heroPages = ref<any[]>([]);
 
 onMounted(async () => {
+  document.title = "Home - My Portfolio";
   try {
     // Fetch hero data
     const heroResponse = await api.get("/hero/page");

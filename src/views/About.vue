@@ -17,7 +17,7 @@
       <p
         class="text-sm md:text-base text-gray-700 mx-4 text-justify leading-relaxed"
         data-aos="fade-up"
-        data-aos-duration="1000"
+        data-aos-duration="2000"
       >
         I am a professional <strong>Full-Stack Web Developer</strong> with over 2 years
         experience in developing modern, user-friendly web applications. My core expertise
@@ -50,7 +50,7 @@
       <div
         class="flex md:w-1/3 w-full justify-center items-center"
         data-aos="fade-up"
-        data-aos-duration="1000"
+        data-aos-duration="2000"
       >
         <img
           src="../assets/img/img3.png"
@@ -61,7 +61,7 @@
 
       <!-- Right Info -->
       <div class="flex md:w-2/3 w-full p-2">
-        <div class="flex flex-col" data-aos="fade-up" data-aos-duration="1000">
+        <div class="flex flex-col" data-aos="fade-up" data-aos-duration="2000">
           <!-- Who I'm -->
           <div>
             <h1
@@ -137,7 +137,7 @@
     <div
       class="flex justify-center items-center py-10 px-2"
       data-aos="fade-up"
-      data-aos-duration="1000"
+      data-aos-duration="2000"
     >
       <div class="flex justify-around items-center w-full max-w-6xl space-x-8">
         <div class="text-center">
@@ -192,6 +192,7 @@ const animateCount = (
 };
 
 onMounted(() => {
+  document.title = "About - My Portfolio";
   animateCount(happyClients, 0, targets[0], 2000);
   setTimeout(() => animateCount(projects, 0, targets[1], 2000), 200);
   setTimeout(() => animateCount(hours, 0, targets[2], 2000), 400);

@@ -159,7 +159,10 @@ export default defineComponent({
       ];
     };
 
-    onMounted(fetchProjects);
+    onMounted(() => {
+      fetchProjects();
+      document.title = "Project - My Portfolio";
+    });
 
     return {
       projects,

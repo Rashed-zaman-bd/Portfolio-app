@@ -41,5 +41,5 @@
     /* Performance */
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue", "src/api/axios.ts", "src/routes/index.ts", "src/main.js"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue", "src/api/axios.ts", "src/routes/index.js", "src/main.js"],
 }
