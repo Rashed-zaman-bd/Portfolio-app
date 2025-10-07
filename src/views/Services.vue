@@ -74,6 +74,7 @@ const skills = ref([]);
 const animated = ref(false);
 
 onMounted(async () => {
+  document.title = "Services - My Portfolio";
   try {
     const { data } = await api.get("services");
     services.value = data.services;

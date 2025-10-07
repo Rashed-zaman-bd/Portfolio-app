@@ -161,7 +161,12 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from "vue";
+onMounted(() => {
+  document.title = "Resume - My Portfolio";
+});
+</script>
 
 <style scoped>
 /* Define the fade animation */
