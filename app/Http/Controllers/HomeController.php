@@ -3,46 +3,71 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\HeroModel;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
-    // Return all heroes as JSON
+    /**
+     * Return heroes with SEO info for the home page
+     */
     public function homePage()
     {
-        $heroes = HeroModel::all()->map(function ($hero) {
-        // Prepend full URL for image
-            $hero->img = $hero->img ? asset('storage/' . $hero->img) : null;
+        $seo = DB::table('seoproperties')->where('pageName', 'home')->first();
+
+        $heroes = DB::table('heroproperties')->get()->map(function ($hero) {
+            $hero->img = $hero->img
+                ? asset('storage/' . ltrim($hero->img, '/'))
+                : null;
             return $hero;
         });
-        return response()->json($heroes, 200);
+
+        return response()->json([
+            'seo' => $seo,
+            'heroes' => $heroes
+        ], 200);
     }
 
-    // Insert new hero record
+        /**
+         * Return only heroes (no SEO)
+         */
+        public function heroData()
+        {
+            $heroes = HeroModel::all()->map(function ($hero) {
+                $hero->img = $hero->img
+                    ? asset('storage/' . ltrim($hero->img, '/'))
+                    : null;
+                return $hero;
+            });
+
+            return response()->json($heroes, 200);
+        }
+
+    /**
+     * Store a new hero record
+     */
     public function storeHero(Request $request)
     {
-        // Validation
         $validated = $request->validate([
             'keyLine'     => 'nullable|string|max:255',
             'title'       => 'nullable|string|max:255',
             'short_title' => 'nullable|string|max:255',
             'message'     => 'nullable|string',
-            'img'         => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // now file
+            'img'         => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
-        // Handle file upload
         $path = null;
         if ($request->hasFile('img')) {
             $path = $request->file('img')->store('hero_images', 'public');
         }
 
-        // Save to database
         $hero = HeroModel::create([
-            'keyLine'     => $request->keyLine,
-            'title'       => $request->title,
-            'short_title' => $request->short_title,
-            'message'     => $request->message,
-            'img'         => $path, // stored path in DB
+            'keyLine'     => $validated['keyLine'] ?? null,
+            'title'       => $validated['title'] ?? null,
+            'short_title' => $validated['short_title'] ?? null,
+            'message'     => $validated['message'] ?? null,
+            'img'         => $path,
         ]);
 
         return response()->json([
@@ -51,13 +76,30 @@ class HomeController extends Controller
         ], 201);
     }
 
-
-    // Update hero record
+    /**
+     * Update existing hero
+     */
     public function updateHero(Request $request, $id)
     {
         $hero = HeroModel::findOrFail($id);
 
-        $hero->update($request->all());
+        $validated = $request->validate([
+            'keyLine'     => 'nullable|string|max:255',
+            'title'       => 'nullable|string|max:255',
+            'short_title' => 'nullable|string|max:255',
+            'message'     => 'nullable|string',
+            'img'         => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
+
+        // ✅ Replace old image if new one uploaded
+        if ($request->hasFile('img')) {
+            if ($hero->img && Storage::disk('public')->exists($hero->img)) {
+                Storage::disk('public')->delete($hero->img);
+            }
+            $validated['img'] = $request->file('img')->store('hero_images', 'public');
+        }
+
+        $hero->update($validated);
 
         return response()->json([
             'message' => 'Hero data updated successfully',
@@ -65,22 +107,33 @@ class HomeController extends Controller
         ], 200);
     }
 
-    // Delete hero record
+    /**
+     * Delete hero
+     */
     public function deleteHero($id)
     {
         $hero = HeroModel::findOrFail($id);
+
+        if ($hero->img && Storage::disk('public')->exists($hero->img)) {
+            Storage::disk('public')->delete($hero->img);
+        }
+
         $hero->delete();
 
         return response()->json(['message' => 'Hero data deleted successfully'], 200);
     }
 
-    // About data
+    /**
+     * About section data (optional)
+     */
     public function aboutData()
     {
         return response()->json(['message' => 'About data goes here'], 200);
     }
 
-    // Social data
+    /**
+     * Social section data (optional)
+     */
     public function socialData()
     {
         return response()->json(['message' => 'Social data goes here'], 200);

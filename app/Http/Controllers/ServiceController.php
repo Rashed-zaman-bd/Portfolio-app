@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Service;
 use App\Models\Skill;
+use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ServiceController extends Controller
 {
@@ -16,7 +17,7 @@ class ServiceController extends Controller
 
         return response()->json([
             'services' => $services,
-            'skills' => $skills,
+            'skills' => $skills
         ]);
     }
 
